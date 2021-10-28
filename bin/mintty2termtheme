@@ -1,0 +1,107 @@
+#!/usr/bin/env perl
+use warnings;
+use strict;
+
+our %map = (
+    'backgroundcolour' => 'background',
+    'black'            => '0',
+    'blue'             => '4',
+    'cyan'             => '6',
+    'green'            => '2',
+    'magenta'          => '5',
+    'red'              => '1',
+    'white'            => '7',
+    'yellow'           => '3',
+    'boldblack'        => '8',
+    'boldblue'         => '12',
+    'boldcyan'         => '14',
+    'boldgreen'        => '10',
+    'boldmagenta'      => '13',
+    'boldred'          => '9',
+    'boldwhite'        => '15',
+    'boldyellow'       => '11',
+    'cursorcolour'     => 'cursor',
+    'foregroundcolour' => 'foreground',
+);
+
+our $currentTheme;
+
+our $oldARGV;
+while (<>) {
+    if (!defined $oldARGV || $ARGV ne $oldARGV) {
+        endTheme();
+        startTheme($ARGV);
+        $oldARGV = $ARGV;
+    }
+    s{\R\z}{};
+    next if m{^\s*#};           # skip comments
+    next if !m{\S};             # skip blank lines
+    if (m{^\s*(?<name>.*?)\s*=\s*
+          (?:
+              (?<red>\d+)\s*,\s*(?<green>\d+)\s*,\s*(?<blue>\d+)
+          |
+              \#(?<redhex>[[:xdigit:]]{2})(?<greenhex>[[:xdigit:]]{2})(?<bluehex>[[:xdigit:]]{2})
+          |
+              rgb:(?<redhex>[[:xdigit:]]{2})/(?<greenhex>[[:xdigit:]]{2})/(?<bluehex>[[:xdigit:]]{2})
+          )
+          \s*$}x) {
+        my $name = $+{name};
+        my $red   = $+{red}   // eval { hex($+{redhex});   };
+        my $green = $+{green} // eval { hex($+{greenhex}); };
+        my $blue  = $+{blue}  // eval { hex($+{bluehex});  };
+        my $namelc = lc $name;
+        my $newName = $map{$name} // $map{$namelc};
+        if (defined $newName) {
+            my $color = sprintf('#%02x%02x%02x', $red, $green, $blue);
+            printThemeColor($newName, $color);
+        } else {
+            warn(sprintf("%s:%d:unrecognized color name: %s\n", $ARGV, $., $name));
+        }
+        if (eof) {
+            endTheme();
+        }
+    } else {
+        warn(sprintf("%s:%d:funny lookin line: %s\n", $ARGV, $., $_));
+    }
+    $oldARGV = $ARGV;
+}
+
+sub startTheme {
+    my ($filename) = @_;
+    return if defined $currentTheme;
+
+    $filename =~ s{\.[0-9A-Za-z]+$}{};
+    $currentTheme = $filename;
+    printf("\$themes->{%s} = {\n", dumper2($filename));
+}
+
+sub printThemeColor {
+    my ($key, $value) = @_;
+    printf("    %-24s => %s,\n", dumper2($key), dumper2($value));
+}
+
+sub endTheme {
+    return if !defined $currentTheme;
+    print("};\n");
+    $currentTheme = undef;
+}
+
+use Data::Dumper;
+
+sub dumper1 {
+    my ($value) = @_;
+    local $Data::Dumper::Indent = 1;
+    local $Data::Dumper::Trailingcomma = 1;
+    local $Data::Dumper::Terse = 1;
+    local $Data::Dumper::Sortkeys = 1;
+    return Dumper($value);
+}
+
+sub dumper2 {
+    my ($value) = @_;
+    local $Data::Dumper::Indent = 0;
+    local $Data::Dumper::Trailingcomma = 1;
+    local $Data::Dumper::Terse = 1;
+    local $Data::Dumper::Sortkeys = 1;
+    return Dumper($value);
+}

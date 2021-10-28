@@ -1,0 +1,108 @@
+#!/usr/bin/env perl
+use warnings;
+use strict;
+
+our %map = (
+    '0' => 'foreground',
+    '1' => 'highlightForeground',
+    '2' => 'background',
+    '3' => 'highlightBackground',
+    '4' => 'cursorText',
+    '5' => 'cursor',
+    '6' => '0',
+    '7' => '8',
+    '8' => '1',
+    '9' => '9',
+    '10' => '2',
+    '11' => '10',
+    '12' => '3',
+    '13' => '11',
+    '14' => '4',
+    '15' => '12',
+    '16' => '5',
+    '17' => '13',
+    '18' => '6',
+    '19' => '14',
+    '20' => '7',
+    '21' => '15',
+);
+
+our $currentTheme;
+
+our $oldARGV;
+while (<>) {
+    if (!defined $oldARGV || $ARGV ne $oldARGV) {
+        endTheme();
+        startTheme($ARGV);
+        $oldARGV = $ARGV;
+    }
+    s{\R\z}{};
+    next if m{^\s*#};           # skip comments
+    next if !m{\S};             # skip blank lines
+    next if m{^\s*Windows\s*Registry\b};
+    next if m{^\s*\[\s*HKEY_};
+
+    if (m{^\s*\"\s*Colour(?<number>\d+)\"\s*=\s*\"\s*
+          (?<red>\d+)\s*,\s*(?<green>\d+)\s*,\s*(?<blue>\d+)
+          \s*\"\s*$}x) {
+        my ($number, $red, $green, $blue) = ($+{number},
+                                             $+{red},
+                                             $+{green},
+                                             $+{blue});
+        my $newName = $map{$number};
+        if (defined $newName) {
+            my $color = sprintf('#%02x%02x%02x', $red, $green, $blue);
+            printThemeColor($newName, $color);
+        } else {
+            warn(sprintf("%s:%d:unrecognized color name: Colour%s\n", $ARGV, $., $number));
+        }
+        if (eof) {
+            endTheme();
+        }
+    } else {
+        warn(sprintf("%s:%d:funny lookin line: %s\n", $ARGV, $., $_));
+    }
+    $oldARGV = $ARGV;
+}
+
+sub startTheme {
+    my ($filename) = @_;
+    return if defined $currentTheme;
+
+    $filename =~ s{\.[0-9A-Za-z]+$}{};
+    $filename =~ s{^\s*\d+\s*\.\s*}{};
+    $filename =~ s{\s+$}{};
+    $currentTheme = "PuTTY $filename";
+    printf("\$themes->{%s} = {\n", dumper2($currentTheme));
+}
+
+sub printThemeColor {
+    my ($key, $value) = @_;
+    printf("    %-24s => %s,\n", dumper2($key), dumper2($value));
+}
+
+sub endTheme {
+    return if !defined $currentTheme;
+    print("};\n");
+    $currentTheme = undef;
+}
+
+use Data::Dumper;
+
+sub dumper1 {
+    my ($value) = @_;
+    local $Data::Dumper::Indent = 1;
+    local $Data::Dumper::Trailingcomma = 1;
+    local $Data::Dumper::Terse = 1;
+    local $Data::Dumper::Sortkeys = 1;
+    return Dumper($value);
+}
+
+sub dumper2 {
+    my ($value) = @_;
+    local $Data::Dumper::Indent = 0;
+    local $Data::Dumper::Trailingcomma = 1;
+    local $Data::Dumper::Terse = 1;
+    local $Data::Dumper::Sortkeys = 1;
+    return Dumper($value);
+}
