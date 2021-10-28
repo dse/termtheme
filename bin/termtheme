@@ -1,0 +1,103 @@
+#!/usr/bin/env perl
+use warnings;
+use strict;
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+###############################################################################
+
+use Term::Themes::themes;
+use Term::Themes::mintty;
+use Term::Themes::putty;
+
+our $themes = {
+    %{$Term::Themes::putty::themes},
+    %{$Term::Themes::mintty::themes},
+    %{$Term::Themes::themes::themes},
+};
+
+###############################################################################
+
+select STDOUT;
+$| = 1;
+
+my $ST  = "\e\\";               # string terminator
+my $OSC = "\e]";                # operating system command
+
+my $theme = shift(@ARGV);
+if (!defined $theme) {
+    setColorScheme($themes->{'solarized-dark'});
+    exit;
+}
+
+if ($theme eq 'themes') {
+    print("$_\n") foreach sort keys %{$themes};
+    exit;
+}
+
+if (exists $themes->{$theme}) {
+    setColorScheme($themes->{$theme});
+    exit;
+}
+
+die("unknown theme name: $theme\n");
+
+sub setColorScheme {
+    my $theme = shift;
+    my %args = %$theme;
+
+    for (my $i = 0; $i <= 15; $i += 1) {
+        setColor($i, $args{$i});
+    }
+    setForeground($args{foreground} // $args{7});
+    setBackground($args{background} // $args{0});
+    setHighlightForeground($args{highlightForeground} // $args{15});
+    setHighlightBackground($args{highlightBackground} // $args{8});
+    setCursor($args{cursor} // $args{7});
+}
+
+sub setColor {
+    my ($colorNumber, $colorValue) = @_;
+    print "${OSC}4;${colorNumber};${colorValue}${ST}";
+}
+sub setForeground {
+    my ($colorValue) = @_;
+    print "${OSC}10;${colorValue}${ST}";
+}
+sub setBackground {
+    my ($colorValue) = @_;
+    print "${OSC}11;${colorValue}${ST}";
+}
+sub setCursor {
+    my ($colorValue) = @_;
+    print "${OSC}12;${colorValue}${ST}";
+}
+sub setHighlightForeground {
+    my ($colorValue) = @_;
+    print "${OSC}17;${colorValue}${ST}";
+}
+sub setHighlightBackground {
+    my ($colorValue) = @_;
+    print "${OSC}19;${colorValue}${ST}";
+}
+sub setBold {
+    my ($colorValue) = @_;
+    print "${OSC}5;0;${colorValue}${ST}";
+}
+sub setUnderline {
+    my ($colorValue) = @_;
+    print "${OSC}5;1;${colorValue}${ST}";
+}
+sub setBlink {
+    my ($colorValue) = @_;
+    print "${OSC}5;2;${colorValue}${ST}";
+}
+sub setReverse {
+    my ($colorValue) = @_;
+    print "${OSC}5;3;${colorValue}${ST}";
+}
+sub setItalic {
+    my ($colorValue) = @_;
+    print "${OSC}5;4;${colorValue}${ST}";
+}
