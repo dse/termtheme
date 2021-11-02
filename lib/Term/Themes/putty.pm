@@ -2,7 +2,7 @@ package Term::Themes::putty;
 
 our $themes = {};
 
-$themes->{'PuTTY Apple Terminal'} = {
+$themes->{'apple-terminal'} = {
     'foreground'             => '#e6e6e6',
     'highlightForeground'    => '#ffffff',
     'background'             => '#000000',
@@ -26,7 +26,7 @@ $themes->{'PuTTY Apple Terminal'} = {
     '7'                      => '#e0e0e0',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Argonaut'} = {
+$themes->{'argonaut'} = {
     'foreground'             => '#fffaf4',
     'highlightForeground'    => '#9e9c9a',
     'background'             => '#0e1019',
@@ -50,7 +50,7 @@ $themes->{'PuTTY Argonaut'} = {
     '7'                      => '#ffffff',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Birds Of Paradise'} = {
+$themes->{'birds-of-paradise'} = {
     'foreground'             => '#e0dbb7',
     'highlightForeground'    => '#fff8d8',
     'background'             => '#2a1f1d',
@@ -74,7 +74,7 @@ $themes->{'PuTTY Birds Of Paradise'} = {
     '7'                      => '#e0dbb7',
     '15'                     => '#fff9d5',
 };
-$themes->{'PuTTY Blazer'} = {
+$themes->{'blazer'} = {
     'foreground'             => '#d9e6f2',
     'highlightForeground'    => '#d9e6f2',
     'background'             => '#0d1926',
@@ -98,7 +98,7 @@ $themes->{'PuTTY Blazer'} = {
     '7'                      => '#d9d9d9',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Chalkboard'} = {
+$themes->{'chalkboard'} = {
     'foreground'             => '#d9e6f2',
     'highlightForeground'    => '#d96f5f',
     'background'             => '#29262f',
@@ -122,7 +122,7 @@ $themes->{'PuTTY Chalkboard'} = {
     '7'                      => '#d9d9d9',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Ciapre'} = {
+$themes->{'ciapre'} = {
     'foreground'             => '#aea47a',
     'highlightForeground'    => '#f4f4f4',
     'background'             => '#191c27',
@@ -146,7 +146,7 @@ $themes->{'PuTTY Ciapre'} = {
     '7'                      => '#aea47f',
     '15'                     => '#f4f4f4',
 };
-$themes->{'PuTTY Dark Pastel'} = {
+$themes->{'dark-pastel'} = {
     'foreground'             => '#ffffff',
     'highlightForeground'    => '#ff5e7d',
     'background'             => '#000000',
@@ -170,7 +170,7 @@ $themes->{'PuTTY Dark Pastel'} = {
     '7'                      => '#bbbbbb',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Desert'} = {
+$themes->{'desert'} = {
     'foreground'             => '#ffffff',
     'highlightForeground'    => '#ffd700',
     'background'             => '#333333',
@@ -194,7 +194,7 @@ $themes->{'PuTTY Desert'} = {
     '7'                      => '#f5deb3',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Espresso'} = {
+$themes->{'espresso'} = {
     'foreground'             => '#ffffff',
     'highlightForeground'    => '#ffffff',
     'background'             => '#323232',
@@ -218,7 +218,7 @@ $themes->{'PuTTY Espresso'} = {
     '7'                      => '#eeeeec',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Fish Of Paradise'} = {
+$themes->{'fish-of-aradise'} = {
     'foreground'             => '#e0dbb7',
     'highlightForeground'    => '#fff8d8',
     'background'             => '#23232c',
@@ -242,7 +242,7 @@ $themes->{'PuTTY Fish Of Paradise'} = {
     '7'                      => '#e0dbb7',
     '15'                     => '#fff9d5',
 };
-$themes->{'PuTTY Fish Tank'} = {
+$themes->{'fish-tank'} = {
     'foreground'             => '#ecf0fe',
     'highlightForeground'    => '#f6ffeb',
     'background'             => '#232537',
@@ -266,7 +266,7 @@ $themes->{'PuTTY Fish Tank'} = {
     '7'                      => '#ecf0fc',
     '15'                     => '#f6ffec',
 };
-$themes->{'PuTTY github'} = {
+$themes->{'github'} = {
     'foreground'             => '#3e3e3e',
     'highlightForeground'    => '#c95500',
     'background'             => '#f4f4f4',
@@ -290,7 +290,7 @@ $themes->{'PuTTY github'} = {
     '7'                      => '#ffffff',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Grass'} = {
+$themes->{'grass'} = {
     'foreground'             => '#fff0a5',
     'highlightForeground'    => '#ffb03b',
     'background'             => '#13773d',
@@ -314,7 +314,7 @@ $themes->{'PuTTY Grass'} = {
     '7'                      => '#bbbbbb',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Highway'} = {
+$themes->{'highway'} = {
     'foreground'             => '#ededed',
     'highlightForeground'    => '#fff8d8',
     'background'             => '#222225',
@@ -338,7 +338,7 @@ $themes->{'PuTTY Highway'} = {
     '7'                      => '#ededed',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Homebrew'} = {
+$themes->{'homebrew'} = {
     'foreground'             => '#00ff00',
     'highlightForeground'    => '#00ff00',
     'background'             => '#000000',
@@ -362,7 +362,7 @@ $themes->{'PuTTY Homebrew'} = {
     '7'                      => '#bfbfbf',
     '15'                     => '#e5e5e5',
 };
-$themes->{'PuTTY Hurtado'} = {
+$themes->{'hurtado'} = {
     'foreground'             => '#dbdbdb',
     'highlightForeground'    => '#ffffff',
     'background'             => '#000000',
@@ -386,7 +386,7 @@ $themes->{'PuTTY Hurtado'} = {
     '7'                      => '#cbcccb',
     '15'                     => '#dbdbdb',
 };
-$themes->{'PuTTY Ic Green Ppl'} = {
+$themes->{'ic-green-ppl'} = {
     'foreground'             => '#d9efd3',
     'highlightForeground'    => '#9fff6d',
     'background'             => '#3a3d3f',
@@ -410,7 +410,7 @@ $themes->{'PuTTY Ic Green Ppl'} = {
     '7'                      => '#e0ffef',
     '15'                     => '#daefd0',
 };
-$themes->{'PuTTY Idletoes'} = {
+$themes->{'idletoes'} = {
     'foreground'             => '#ffffff',
     'highlightForeground'    => '#ffffa9',
     'background'             => '#323232',
@@ -434,7 +434,7 @@ $themes->{'PuTTY Idletoes'} = {
     '7'                      => '#eeeeec',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Igvita Desert'} = {
+$themes->{'igvita-desert'} = {
     'foreground'             => '#ffffff',
     'highlightForeground'    => '#ffffff',
     'background'             => '#333333',
@@ -458,7 +458,7 @@ $themes->{'PuTTY Igvita Desert'} = {
     '7'                      => '#f5deb3',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Igvita Light'} = {
+$themes->{'igvita-light'} = {
     'foreground'             => '#bbbbbb',
     'highlightForeground'    => '#ffffff',
     'background'             => '#000000',
@@ -482,7 +482,7 @@ $themes->{'PuTTY Igvita Light'} = {
     '7'                      => '#bbbbbb',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Invisibone'} = {
+$themes->{'invisibone'} = {
     'foreground'             => '#a0a0a0',
     'highlightForeground'    => '#cfcfcf',
     'background'             => '#232323',
@@ -506,7 +506,7 @@ $themes->{'PuTTY Invisibone'} = {
     '7'                      => '#cfcfcf',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Kibble'} = {
+$themes->{'kibble'} = {
     'foreground'             => '#f7f7f7',
     'highlightForeground'    => '#ca631e',
     'background'             => '#0e100a',
@@ -530,7 +530,7 @@ $themes->{'PuTTY Kibble'} = {
     '7'                      => '#e2d1e3',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Liquid Carbon'} = {
+$themes->{'liquid-carbon'} = {
     'foreground'             => '#afc2c2',
     'highlightForeground'    => '#ffffff',
     'background'             => '#303030',
@@ -554,7 +554,7 @@ $themes->{'PuTTY Liquid Carbon'} = {
     '7'                      => '#bccccc',
     '15'                     => '#bccccc',
 };
-$themes->{'PuTTY Liquid Carbon Transparent'} = {
+$themes->{'liquid-carbon-transparent'} = {
     'foreground'             => '#afc2c2',
     'highlightForeground'    => '#ffffff',
     'background'             => '#000000',
@@ -578,7 +578,7 @@ $themes->{'PuTTY Liquid Carbon Transparent'} = {
     '7'                      => '#bccccc',
     '15'                     => '#bccccc',
 };
-$themes->{'PuTTY Liquid Carbon Transparent Inverse'} = {
+$themes->{'liquid-carbon-transparent-inverse'} = {
     'foreground'             => '#afc2c2',
     'highlightForeground'    => '#ffffff',
     'background'             => '#000000',
@@ -602,7 +602,7 @@ $themes->{'PuTTY Liquid Carbon Transparent Inverse'} = {
     '7'                      => '#000000',
     '15'                     => '#000000',
 };
-$themes->{'PuTTY Man Page'} = {
+$themes->{'man-page'} = {
     'foreground'             => '#000000',
     'highlightForeground'    => '#000000',
     'background'             => '#fef49c',
@@ -626,7 +626,7 @@ $themes->{'PuTTY Man Page'} = {
     '7'                      => '#cccccc',
     '15'                     => '#e5e5e5',
 };
-$themes->{'PuTTY Monokai Soda'} = {
+$themes->{'monokai-soda'} = {
     'foreground'             => '#c4c5b5',
     'highlightForeground'    => '#c4c5b5',
     'background'             => '#1a1a1a',
@@ -650,7 +650,7 @@ $themes->{'PuTTY Monokai Soda'} = {
     '7'                      => '#c4c5b5',
     '15'                     => '#f6f6ef',
 };
-$themes->{'PuTTY Monokai Dimmed'} = {
+$themes->{'monokai-dimmed'} = {
     'foreground'             => '#b9bcba',
     'highlightForeground'    => '#feffb2',
     'background'             => '#1f1f1f',
@@ -674,7 +674,7 @@ $themes->{'PuTTY Monokai Dimmed'} = {
     '7'                      => '#b9bcba',
     '15'                     => '#fdffb9',
 };
-$themes->{'PuTTY Monokai Stevelosh'} = {
+$themes->{'monokai-stevelosh'} = {
     'foreground'             => '#dbdbdb',
     'highlightForeground'    => '#ffffff',
     'background'             => '#000000',
@@ -698,7 +698,7 @@ $themes->{'PuTTY Monokai Stevelosh'} = {
     '7'                      => '#f2f2f2',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Neopolitan'} = {
+$themes->{'neopolitan'} = {
     'foreground'             => '#ffffff',
     'highlightForeground'    => '#ffffff',
     'background'             => '#171310',
@@ -722,7 +722,7 @@ $themes->{'PuTTY Neopolitan'} = {
     '7'                      => '#f8f8f8',
     '15'                     => '#f8f8f8',
 };
-$themes->{'PuTTY Novel'} = {
+$themes->{'novel'} = {
     'foreground'             => '#3b2322',
     'highlightForeground'    => '#8e2a19',
     'background'             => '#dfdbc3',
@@ -746,7 +746,7 @@ $themes->{'PuTTY Novel'} = {
     '7'                      => '#cccccc',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Ocean'} = {
+$themes->{'ocean'} = {
     'foreground'             => '#ffffff',
     'highlightForeground'    => '#ffffff',
     'background'             => '#224fbc',
@@ -770,7 +770,7 @@ $themes->{'PuTTY Ocean'} = {
     '7'                      => '#bfbfbf',
     '15'                     => '#e5e5e5',
 };
-$themes->{'PuTTY Papirus Dark'} = {
+$themes->{'papirus-dark'} = {
     'foreground'             => '#d1c3b8',
     'highlightForeground'    => '#d1c3b8',
     'background'             => '#2e2c28',
@@ -794,7 +794,7 @@ $themes->{'PuTTY Papirus Dark'} = {
     '7'                      => '#c8b972',
     '15'                     => '#e4dd96',
 };
-$themes->{'PuTTY Pro'} = {
+$themes->{'pro'} = {
     'foreground'             => '#f2f2f2',
     'highlightForeground'    => '#ffffff',
     'background'             => '#000000',
@@ -818,7 +818,7 @@ $themes->{'PuTTY Pro'} = {
     '7'                      => '#bfbfbf',
     '15'                     => '#e5e5e5',
 };
-$themes->{'PuTTY Red Sands'} = {
+$themes->{'red-sands'} = {
     'foreground'             => '#d7c9a7',
     'highlightForeground'    => '#dfbd22',
     'background'             => '#7a251e',
@@ -842,7 +842,7 @@ $themes->{'PuTTY Red Sands'} = {
     '7'                      => '#bbbbbb',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Seafoam Pastel'} = {
+$themes->{'seafoam-pastel'} = {
     'foreground'             => '#d4e7d4',
     'highlightForeground'    => '#648890',
     'background'             => '#243435',
@@ -866,7 +866,7 @@ $themes->{'PuTTY Seafoam Pastel'} = {
     '7'                      => '#e0e0e0',
     '15'                     => '#e0e0e0',
 };
-$themes->{'PuTTY Solarized Dark'} = {
+$themes->{'solarized-dark'} = {
     'foreground'             => '#839496',
     'highlightForeground'    => '#93a1a1',
     'background'             => '#002b36',
@@ -890,7 +890,7 @@ $themes->{'PuTTY Solarized Dark'} = {
     '7'                      => '#eee8d5',
     '15'                     => '#fdf6e3',
 };
-$themes->{'PuTTY Solarized Light'} = {
+$themes->{'solarized-light'} = {
     'foreground'             => '#657b83',
     'highlightForeground'    => '#586e75',
     'background'             => '#fdf6e3',
@@ -914,7 +914,7 @@ $themes->{'PuTTY Solarized Light'} = {
     '7'                      => '#eee8d5',
     '15'                     => '#fdf6e3',
 };
-$themes->{'PuTTY Solarized Darcula'} = {
+$themes->{'solarized-darcula'} = {
     'foreground'             => '#d2d8d9',
     'highlightForeground'    => '#ececec',
     'background'             => '#3d3f41',
@@ -938,7 +938,7 @@ $themes->{'PuTTY Solarized Darcula'} = {
     '7'                      => '#d2d8d9',
     '15'                     => '#d2d8d9',
 };
-$themes->{'PuTTY Sundried'} = {
+$themes->{'sundried'} = {
     'foreground'             => '#c9c9c9',
     'highlightForeground'    => '#ffffff',
     'background'             => '#1a1818',
@@ -962,7 +962,7 @@ $themes->{'PuTTY Sundried'} = {
     '7'                      => '#c9c9c9',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Sympfonic'} = {
+$themes->{'sympfonic'} = {
     'foreground'             => '#ffffff',
     'highlightForeground'    => '#ff8400',
     'background'             => '#000000',
@@ -986,7 +986,7 @@ $themes->{'PuTTY Sympfonic'} = {
     '7'                      => '#ffffff',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Teerb'} = {
+$themes->{'teerb'} = {
     'foreground'             => '#d0d0d0',
     'highlightForeground'    => '#e5e5e5',
     'background'             => '#262626',
@@ -1010,7 +1010,7 @@ $themes->{'PuTTY Teerb'} = {
     '7'                      => '#d0d0d0',
     '15'                     => '#efefef',
 };
-$themes->{'PuTTY Terminal Basic'} = {
+$themes->{'terminal-basic'} = {
     'foreground'             => '#000000',
     'highlightForeground'    => '#000000',
     'background'             => '#ffffff',
@@ -1034,7 +1034,7 @@ $themes->{'PuTTY Terminal Basic'} = {
     '7'                      => '#bfbfbf',
     '15'                     => '#e5e5e5',
 };
-$themes->{'PuTTY Thayer'} = {
+$themes->{'thayer'} = {
     'foreground'             => '#a0a0a0',
     'highlightForeground'    => '#ffffff',
     'background'             => '#1b1d1e',
@@ -1058,7 +1058,7 @@ $themes->{'PuTTY Thayer'} = {
     '7'                      => '#ccccc6',
     '15'                     => '#f8f8f2',
 };
-$themes->{'PuTTY Tomorrow'} = {
+$themes->{'tomorrow'} = {
     'foreground'             => '#4d4d4c',
     'highlightForeground'    => '#eaeaea',
     'background'             => '#fafafa',
@@ -1082,7 +1082,7 @@ $themes->{'PuTTY Tomorrow'} = {
     '7'                      => '#efefef',
     '15'                     => '#d6d6d6',
 };
-$themes->{'PuTTY Tomorrow Night'} = {
+$themes->{'tomorrow-night'} = {
     'foreground'             => '#c5c8c6',
     'highlightForeground'    => '#eaeaea',
     'background'             => '#1d1f21',
@@ -1106,7 +1106,7 @@ $themes->{'PuTTY Tomorrow Night'} = {
     '7'                      => '#c0c8c6',
     '15'                     => '#eaeaea',
 };
-$themes->{'PuTTY Twilight'} = {
+$themes->{'twilight'} = {
     'foreground'             => '#ffffd4',
     'highlightForeground'    => '#ffffd4',
     'background'             => '#141414',
@@ -1130,7 +1130,7 @@ $themes->{'PuTTY Twilight'} = {
     '7'                      => '#ffffd4',
     '15'                     => '#ffffd4',
 };
-$themes->{'PuTTY Vaughn'} = {
+$themes->{'vaughn'} = {
     'foreground'             => '#dcdccc',
     'highlightForeground'    => '#ff5e7d',
     'background'             => '#25234f',
@@ -1154,7 +1154,7 @@ $themes->{'PuTTY Vaughn'} = {
     '7'                      => '#709080',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY X Dotshare'} = {
+$themes->{'x-dotshare'} = {
     'foreground'             => '#d7d0c7',
     'highlightForeground'    => '#ffffff',
     'background'             => '#151515',
@@ -1178,7 +1178,7 @@ $themes->{'PuTTY X Dotshare'} = {
     '7'                      => '#dddddd',
     '15'                     => '#dddddd',
 };
-$themes->{'PuTTY Zenburn'} = {
+$themes->{'putty-zenburn'} = {
     'foreground'             => '#dcdccc',
     'highlightForeground'    => '#dcdccc',
     'background'             => '#3f3f3f',
@@ -1202,7 +1202,7 @@ $themes->{'PuTTY Zenburn'} = {
     '7'                      => '#dcdccc',
     '15'                     => '#ffffff',
 };
-$themes->{'PuTTY Mariana'} = {
+$themes->{'mariana'} = {
     'foreground'             => '#d8dee9',
     'highlightForeground'    => '#93a1a1',
     'background'             => '#343d46',
