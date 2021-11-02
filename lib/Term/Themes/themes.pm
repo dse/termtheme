@@ -21,7 +21,7 @@ my %solarizedColors = (
     green   => '#859900',       # 133 153 0
 );
 
-$themes->{'solarized-dark'} = {
+$themes->{'my-solarized-dark'} = {
     0                   => $solarizedColors{base02},
     1                   => $solarizedColors{red},
     2                   => $solarizedColors{green},
@@ -45,16 +45,16 @@ $themes->{'solarized-dark'} = {
     cursor              => '#0f4999',
 };
 
-$themes->{'solarized-dark-2'} = {
-    %{$themes->{'solarized-dark'}},
+$themes->{'my-solarized-dark-2'} = {
+    %{$themes->{'my-solarized-dark'}},
     foreground          => $solarizedColors{base1},
     background          => $solarizedColors{base02},
     highlightForeground => $solarizedColors{base2},
     highlightBackground => $solarizedColors{base01},
 };
 
-$themes->{'solarized-light'} = {
-    %{$themes->{'solarized-dark'}},
+$themes->{'my-solarized-light'} = {
+    %{$themes->{'my-solarized-dark'}},
     0                   => $solarizedColors{base2},
     7                   => $solarizedColors{base02},
     8                   => $solarizedColors{base3},
@@ -69,15 +69,15 @@ $themes->{'solarized-light'} = {
     highlightBackground => $solarizedColors{base2},
 };
 
-$themes->{'solarized-light-2'} = {
-    %{$themes->{'solarized-light'}},
+$themes->{'my-solarized-light-2'} = {
+    %{$themes->{'my-solarized-light'}},
     foreground          => $solarizedColors{base01},
     background          => $solarizedColors{base2},
     highlightForeground => $solarizedColors{base02},
     highlightBackground => $solarizedColors{base1},
 };
 
-$themes->{'zenburn'} = {
+$themes->{'my-zenburn'} = {
     #                        1 2 4
     #                        ------
     0                   => '#1f1f1f', # black
@@ -103,7 +103,7 @@ $themes->{'zenburn'} = {
     cursor              => '#8faf9f',
 };
 
-$themes->{easy} = {
+$themes->{'easy'} = {
     #                        1 2 4
     #                        ------
     0                   => '#000000', # black
@@ -129,7 +129,7 @@ $themes->{easy} = {
     cursor              => '#ff9933',
 };
 
-$themes->{greenscreen} = {
+$themes->{'greenscreen'} = {
     %{$themes->{easy}},
     foreground          => '#11cc11',
     background          => '#113311',
