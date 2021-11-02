@@ -5,22 +5,16 @@ use strict;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 
-###############################################################################
+#------------------------------------------------------------------------------
+use Data::Dumper qw(Dumper);
+use IO::Handle;
 
-use Term::Themes::themes;
-use Term::Themes::mintty;
-use Term::Themes::putty;
-
-our $themes = {
-    %{$Term::Themes::putty::themes},
-    %{$Term::Themes::mintty::themes},
-    %{$Term::Themes::themes::themes},
-};
+#------------------------------------------------------------------------------
+use Term::Themes qw($themes);
 
 ###############################################################################
 
-select STDOUT;
-$| = 1;
+STDOUT->autoflush(1);
 
 my $ST  = "\e\\";               # string terminator
 my $OSC = "\e]";                # operating system command
@@ -28,6 +22,18 @@ my $OSC = "\e]";                # operating system command
 my $theme = shift(@ARGV);
 if (!defined $theme) {
     setColorScheme($themes->{'solarized-dark'});
+    exit;
+}
+
+if ($theme eq 'dump') {
+    $theme = shift(@ARGV);
+    if (defined $theme) {
+        local $Data::Dumper::Indent = 1;
+        local $Data::Dumper::Sortkeys = 1;
+        print(Dumper($themes->{$theme}));
+        exit;
+    }
+    print(Dumper($themes));
     exit;
 }
 
