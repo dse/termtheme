@@ -2,7 +2,7 @@ package Term::Themes::mintty;
 
 our $themes = {};
 
-$themes->{'mintty dracula'} = {
+$themes->{'dracula'} = {
     'foreground'             => '#f8f8f2',
     'background'             => '#282a36',
     '0'                      => '#000000',
@@ -22,7 +22,7 @@ $themes->{'mintty dracula'} = {
     '7'                      => '#bfbfbf',
     '15'                     => '#e6e6e6',
 };
-$themes->{'mintty flat-ui'} = {
+$themes->{'flat-ui'} = {
     'foreground'             => '#ecf0f1',
     'background'             => '#181818',
     'cursor'                 => '#d35400',
@@ -43,7 +43,7 @@ $themes->{'mintty flat-ui'} = {
     '15'                     => '#ecf0f1',
     '7'                      => '#bdc3c7',
 };
-$themes->{'mintty gruvbox'} = {
+$themes->{'gruvbox'} = {
     'foreground'             => '#ebdbb2',
     'background'             => '#1d2021',
     'cursor'                 => '#fd9d4f',
@@ -64,7 +64,7 @@ $themes->{'mintty gruvbox'} = {
     '7'                      => '#a89984',
     '15'                     => '#ebdbb2',
 };
-$themes->{'mintty html'} = {
+$themes->{'html'} = {
     '0'                      => '#000000',
     '1'                      => '#800000',
     '2'                      => '#008000',
@@ -82,7 +82,7 @@ $themes->{'mintty html'} = {
     '14'                     => '#00ffff',
     '15'                     => '#ffffff',
 };
-$themes->{'mintty mintty'} = {
+$themes->{'mintty'} = {
     '0'                      => '#000000',
     '1'                      => '#bf0000',
     '2'                      => '#00bf00',
@@ -100,7 +100,7 @@ $themes->{'mintty mintty'} = {
     '14'                     => '#40ffff',
     '15'                     => '#ffffff',
 };
-$themes->{'mintty nord'} = {
+$themes->{'nord'} = {
     'background'             => '#2e3440',
     'foreground'             => '#d8dee9',
     'cursor'                 => '#d8dee9',
@@ -121,7 +121,7 @@ $themes->{'mintty nord'} = {
     '7'                      => '#e5e9f0',
     '15'                     => '#eceff4',
 };
-$themes->{'mintty rosipov'} = {
+$themes->{'rosipov'} = {
     'foreground'             => '#839496',
     'background'             => '#000000',
     'cursor'                 => '#dc322f',
@@ -142,25 +142,25 @@ $themes->{'mintty rosipov'} = {
     '7'                      => '#eee8d5',
     '15'                     => '#fdf6e3',
 };
-$themes->{'mintty vga'} = {
+$themes->{'vga'} = {
     '0'                      => '#000000',
-    '4'                      => '#0000aa',
-    '2'                      => '#00aa00',
-    '6'                      => '#00aaaa',
     '1'                      => '#aa0000',
-    '5'                      => '#aa00aa',
+    '2'                      => '#00aa00',
     '3'                      => '#aa5500',
+    '4'                      => '#0000aa',
+    '5'                      => '#aa00aa',
+    '6'                      => '#00aaaa',
     '7'                      => '#aaaaaa',
     '8'                      => '#555555',
-    '12'                     => '#5555ff',
-    '10'                     => '#55ff55',
-    '14'                     => '#55ffff',
     '9'                      => '#ff5555',
-    '13'                     => '#ff55ff',
+    '10'                     => '#55ff55',
     '11'                     => '#ffff55',
+    '12'                     => '#5555ff',
+    '13'                     => '#ff55ff',
+    '14'                     => '#55ffff',
     '15'                     => '#ffffff',
 };
-$themes->{'mintty windows10'} = {
+$themes->{'windows10'} = {
     '0'                      => '#0c0c0c',
     '4'                      => '#0037da',
     '2'                      => '#13a10e',
@@ -178,7 +178,7 @@ $themes->{'mintty windows10'} = {
     '11'                     => '#f9f1a5',
     '15'                     => '#f2f2f2',
 };
-$themes->{'mintty xterm'} = {
+$themes->{'xterm'} = {
     '0'                      => '#000000',
     '1'                      => '#cd0000',
     '2'                      => '#00cd00',

@@ -129,13 +129,54 @@ $themes->{'easy'} = {
     cursor              => '#ff9933',
 };
 
+$themes->{'awesome'} = {
+    '0'                 => '#000000',
+    '1'                 => '#aa0000',
+    '2'                 => '#00aa00',
+    '3'                 => '#aa5500',
+    '4'                 => '#0000aa',
+    '5'                 => '#aa00aa',
+    '6'                 => '#00aaaa',
+    '7'                 => '#aaaaaa',
+    '8'                 => '#555555',
+    '9'                 => '#ff5555',
+    '10'                => '#55ff55',
+    '11'                => '#ffff00',
+    '12'                => '#5555ff',
+    '13'                => '#ff55ff',
+    '14'                => '#55ffff',
+    '15'                => '#ffffff',
+    foreground          => '#dcdcdc',
+    background          => '#000000',
+    highlightForeground => '#ffffff',
+    highlightBackground => '#111111',
+    cursor              => '#00dd00',
+};
+
+$themes->{'sgi-winterm'} = {
+    %{$themes->{awesome}},
+    foreground => '#dcdcdc',
+    background => '#00003f',
+    highlightForeground => '#ffffff',
+    highlightBackground => '#00007f',
+};
+
 $themes->{'greenscreen'} = {
-    %{$themes->{easy}},
-    foreground          => '#11cc11',
-    background          => '#113311',
-    highlightForeground => '#22ff22',
-    highlightBackground => '#116611',
+    %{$themes->{awesome}},
+    foreground          => '#00cc00',
+    background          => '#002200',
+    highlightForeground => '#00ff00',
+    highlightBackground => '#003300',
     cursor              => '#55ff55',
+};
+
+$themes->{'amberscreen'} = {
+    %{$themes->{awesome}},
+    foreground          => '#cc8800',
+    background          => '#241800',
+    highlightForeground => '#ffaa00',
+    highlightBackground => '#483000',
+    cursor              => '#ffaa00',
 };
 
 1;

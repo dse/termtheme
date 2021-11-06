@@ -25,7 +25,7 @@ if (!defined $theme) {
     exit;
 }
 
-if ($theme eq 'dump') {
+if ($theme eq 'dump-theme') {
     $theme = shift(@ARGV);
     if (defined $theme) {
         local $Data::Dumper::Indent = 1;
@@ -37,7 +37,17 @@ if ($theme eq 'dump') {
     exit;
 }
 
-if ($theme eq 'themes') {
+if ($theme eq 'convert-to-mintty') {
+    $theme = shift(@ARGV);
+    if (defined $theme) {
+        printMinttyTheme($theme);
+        exit;
+    } else {
+        die("no theme specified\n");
+    }
+}
+
+if ($theme eq 'list-themes') {
     print("$_\n") foreach sort keys %{$themes};
     exit;
 }
@@ -106,4 +116,38 @@ sub setReverse {
 sub setItalic {
     my ($colorValue) = @_;
     print "${OSC}5;4;${colorValue}${ST}";
+}
+
+sub printMinttyTheme {
+    my ($themeName) = @_;
+    my $theme = $themes->{$themeName};
+    printf("HighlightForegroundColour= %3d, %3d, %3d\n", rgb($theme->{highlightForeground})) if defined $theme->{highlightForeground};
+    printf("HighlightBackgroundColour= %3d, %3d, %3d\n", rgb($theme->{highlightBackground})) if defined $theme->{highlightBackground};
+    printf("ForegroundColour=          %3d, %3d, %3d\n", rgb($theme->{foreground}))          if defined $theme->{foreground};
+    printf("BackgroundColour=          %3d, %3d, %3d\n", rgb($theme->{background}))          if defined $theme->{background};
+    printf("CursorColour=              %3d, %3d, %3d\n", rgb($theme->{cursor}))              if defined $theme->{cursor};
+    printf("BoldBlack=                 %3d, %3d, %3d\n", rgb($theme->{8}))                   if defined $theme->{8};
+    printf("Black=                     %3d, %3d, %3d\n", rgb($theme->{0}))                   if defined $theme->{0};
+    printf("BoldRed=                   %3d, %3d, %3d\n", rgb($theme->{9}))                   if defined $theme->{9};
+    printf("Red=                       %3d, %3d, %3d\n", rgb($theme->{1}))                   if defined $theme->{1};
+    printf("BoldGreen=                 %3d, %3d, %3d\n", rgb($theme->{10}))                  if defined $theme->{10};
+    printf("Green=                     %3d, %3d, %3d\n", rgb($theme->{2}))                   if defined $theme->{2};
+    printf("BoldYellow=                %3d, %3d, %3d\n", rgb($theme->{11}))                  if defined $theme->{11};
+    printf("Yellow=                    %3d, %3d, %3d\n", rgb($theme->{3}))                   if defined $theme->{3};
+    printf("BoldBlue=                  %3d, %3d, %3d\n", rgb($theme->{12}))                  if defined $theme->{12};
+    printf("Blue=                      %3d, %3d, %3d\n", rgb($theme->{4}))                   if defined $theme->{4};
+    printf("BoldMagenta=               %3d, %3d, %3d\n", rgb($theme->{13}))                  if defined $theme->{13};
+    printf("Magenta=                   %3d, %3d, %3d\n", rgb($theme->{5}))                   if defined $theme->{5};
+    printf("BoldCyan=                  %3d, %3d, %3d\n", rgb($theme->{14}))                  if defined $theme->{14};
+    printf("Cyan=                      %3d, %3d, %3d\n", rgb($theme->{6}))                   if defined $theme->{6};
+    printf("BoldWhite=                 %3d, %3d, %3d\n", rgb($theme->{15}))                  if defined $theme->{15};
+    printf("White=                     %3d, %3d, %3d\n", rgb($theme->{7}))                   if defined $theme->{7};
+}
+
+sub rgb {
+    my ($string) = @_;
+    if ($string =~ m{^\#(?<r>[[:xdigit:]]{2})(?<g>[[:xdigit:]]{2})(?<b>[[:xdigit:]]{2})$}) {
+        my ($r, $g, $b) = ($+{r}, $+{g}, $+{b});
+        return (hex($r), hex($g), hex($b));
+    }
 }
