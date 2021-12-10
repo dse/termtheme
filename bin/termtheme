@@ -20,12 +20,18 @@ my $ST  = "\e\\";               # string terminator
 my $OSC = "\e]";                # operating system command
 
 my $theme = shift(@ARGV);
-if (!defined $theme) {
-    setColorScheme($themes->{'solarized-dark'});
+if (!defined $theme || $theme eq 'help') {
+    print(<<"END");
+usage:
+    termtheme dump-theme <theme>
+    termtheme convert-to-mintty <theme>
+    termtheme list-themes
+    termtheme <theme>
+END
     exit;
 }
 
-if ($theme eq 'dump-theme') {
+if ($theme eq 'dump' || $theme eq 'dump-theme') {
     $theme = shift(@ARGV);
     if (defined $theme) {
         local $Data::Dumper::Indent = 1;
@@ -37,7 +43,7 @@ if ($theme eq 'dump-theme') {
     exit;
 }
 
-if ($theme eq 'convert-to-mintty') {
+if ($theme eq 'MINTTY' || $theme eq 'convert-to-mintty') {
     $theme = shift(@ARGV);
     if (defined $theme) {
         printMinttyTheme($theme);
@@ -47,7 +53,7 @@ if ($theme eq 'convert-to-mintty') {
     }
 }
 
-if ($theme eq 'list-themes') {
+if ($theme eq 'list' || $theme eq 'list-themes') {
     print("$_\n") foreach sort keys %{$themes};
     exit;
 }
