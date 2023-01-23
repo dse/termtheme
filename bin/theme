@@ -1,0 +1,258 @@
+#!/usr/bin/env perl
+use warnings;
+use strict;
+use open qw(:locale);
+use List::Util qw(max min);
+use POSIX qw(round);
+
+STDOUT->autoflush(1);
+
+our $KEYS = [
+    "HighlightForegroundColour",
+    "HighlightBackgroundColour",
+    "ForegroundColour",
+    "BackgroundColour",
+    "CursorColour",
+    "BoldBlack",
+    "Black",
+    "BoldRed",
+    "Red",
+    "BoldGreen",
+    "Green",
+    "BoldYellow",
+    "Yellow",
+    "BoldBlue",
+    "Blue",
+    "BoldMagenta",
+    "Magenta",
+    "BoldCyan",
+    "Cyan",
+    "BoldWhite",
+    "White",
+];
+
+our $COLOR_KEYS = [
+    "BoldBlack",
+    "Black",
+    "BoldRed",
+    "Red",
+    "BoldGreen",
+    "Green",
+    "BoldYellow",
+    "Yellow",
+    "BoldBlue",
+    "Blue",
+    "BoldMagenta",
+    "Magenta",
+    "BoldCyan",
+    "Cyan",
+    "BoldWhite",
+    "White",
+];
+
+our $DEFAULT_COLORS = {
+    HighlightForegroundColour => [ 255, 255, 255 ],
+    HighlightBackgroundColour => [ 102, 102, 102 ],
+    ForegroundColour          => [ 187, 187, 187 ],
+    BackgroundColour          => [   0,   0,   0 ],
+    CursorColour              => [ 255, 255,   0 ],
+    BoldBlack                 => [ 102, 102, 102 ],
+    Black                     => [   0,   0,   0 ],
+    BoldRed                   => [ 255,  51,  51 ],
+    Red                       => [ 187,   0,   0 ],
+    BoldGreen                 => [  51, 255,  51 ],
+    Green                     => [   0, 187,   0 ],
+    BoldYellow                => [ 255, 255,  51 ],
+    Yellow                    => [ 187, 187,   0 ],
+    BoldBlue                  => [  51,  51, 255 ],
+    Blue                      => [   0,   0, 187 ],
+    BoldMagenta               => [ 255,  51, 255 ],
+    Magenta                   => [ 187,   0, 187 ],
+    BoldCyan                  => [  51, 255, 255 ],
+    Cyan                      => [   0, 187, 187 ],
+    BoldWhite                 => [ 255, 255, 255 ],
+    White                     => [ 187, 187, 187 ],
+};
+
+our $COLOR_NUMBERS = {
+    HighlightForegroundColour => '17',
+    HighlightBackgroundColour => '19',
+    ForegroundColour          => '10',
+    BackgroundColour          => '11',
+    CursorColour              => '12',
+    BoldBlack                 => '4;8',
+    Black                     => '4;0',
+    BoldRed                   => '4;9',
+    Red                       => '4;1',
+    BoldGreen                 => '4;10',
+    Green                     => '4;2',
+    BoldYellow                => '4;11',
+    Yellow                    => '4;3',
+    BoldBlue                  => '4;12',
+    Blue                      => '4;4',
+    BoldMagenta               => '4;13',
+    Magenta                   => '4;5',
+    BoldCyan                  => '4;14',
+    Cyan                      => '4;6',
+    BoldWhite                 => '4;15',
+    White                     => '4;7',
+};
+
+our $ST  = "\e\\";              # string terminator
+our $OSC = "\e]";               # operating system command
+
+our $GAMMA = 2.2;            # nominal gamma, sRGB, IEC 61966-2-1:1999
+
+if (scalar @ARGV && $ARGV[0] eq 'template') {
+    print_theme($DEFAULT_COLORS);
+    exit(0);
+}
+
+our $action = "";
+
+if (scalar @ARGV && $ARGV[0] eq 'greenscreenify') {
+
+
+    $action = 'greenscreenify';
+    shift(@ARGV);
+}
+
+my $theme = {};
+while (<>) {
+    s{\R\z}{};
+    next unless m{^\s*(?<name>\S.*?)
+                  \s*=\s*
+                  (?<red>\d+)
+                  \s*,\s*
+                  (?<green>\d+)
+                  \s*,\s*
+                  (?<blue>\d+)
+                  \s*$}x;
+    my ($name, $red, $green, $blue) = @+{qw(name red green blue)};
+    $_ = clamp($_, 0, 255) foreach ($red, $green, $blue);
+    $theme->{$name} = [$red, $green, $blue];
+}
+
+if ($action eq 'greenscreenify') {
+    STDOUT->autoflush(1);
+    STDERR->autoflush(1);
+    my @range = (0..30);
+    foreach my $i (@range, reverse(@range), @range, reverse(@range), @range, reverse(@range)) {
+        print STDERR ("$i\r");
+        select(undef, undef, undef, 0.1);
+        my $x = $i / 10;
+        my $new_theme = greenscreenify($theme, $x);
+        print_theme($new_theme);
+    }
+    exit(0);
+}
+
+foreach my $key (keys %$COLOR_NUMBERS) {
+    my $values = $theme->{$key};
+    if (!defined $values) {
+        warn("$key not specified\n");
+        next;
+    }
+    my $srgb_color = rgb_hex(@$values);
+    print($OSC, $COLOR_NUMBERS->{$key}, ';', $srgb_color, $ST);
+}
+
+sub print_theme {
+    my ($theme) = @_;
+    my $cols = max(map { length($_) } keys %$theme);
+    foreach my $key (@$KEYS) {
+        if (defined $theme->{$key}) {
+            printf("%-*s = %3d, %3d, %3d\n",
+                   $cols, $key, @{$theme->{$key}});
+        } else {
+            printf("# %s not specified\n", $key);
+        }
+    }
+}
+
+sub greenscreenify {
+    my ($theme, $amount) = @_;
+    my $new_theme = { %$theme };
+
+    my @old_bg    = @{$theme->{BackgroundColour}};
+    my @old_fg    = @{$theme->{ForegroundColour}};
+    my @old_hi_bg = @{$theme->{HighlightBackgroundColour}};
+    my @old_hi_fg = @{$theme->{HighlightForegroundColour}};
+
+    my @new_bg    = srgb_to_linear(  0,  34,   0);
+    my @new_fg    = srgb_to_linear( 51, 204,  51);
+    my @new_hi_fg = srgb_to_linear(102, 255, 102);
+    my @new_hi_bg = (($new_bg[0] + $new_hi_fg[0] - $new_fg[0]),
+                     ($new_bg[1] + $new_hi_fg[1] - $new_fg[1]),
+                     ($new_bg[2] + $new_hi_fg[2] - $new_fg[2]));
+
+    $new_theme->{BackgroundColour}          = [ linear_to_srgb(@new_bg) ];
+    $new_theme->{ForegroundColour}          = [ linear_to_srgb(@new_fg) ];
+    $new_theme->{HighlightBackgroundColour} = [ linear_to_srgb(@new_hi_bg) ];
+    $new_theme->{HighlightForegroundColour} = [ linear_to_srgb(@new_hi_fg) ];
+
+    my @old_black = srgb_to_linear(@{$theme->{Black}});
+    my @old_white = srgb_to_linear(@{$theme->{White}});
+    my @new_black = @new_bg;
+    my @new_white = @new_hi_fg;
+
+    foreach my $key (@$COLOR_KEYS) {
+        my ($old_r, $old_g, $old_b) = @{$theme->{$key}};
+        my $old_x_r = ($old_r - $old_black[0]) / ($old_white[0] - $old_black[0]);
+        my $old_x_g = ($old_g - $old_black[1]) / ($old_white[1] - $old_black[1]);
+        my $old_x_b = ($old_b - $old_black[2]) / ($old_white[2] - $old_black[2]);
+        my $new_r = $new_black[0] + ($new_white[0] - $new_black[0]) * $old_x_r;
+        my $new_g = $new_black[1] + ($new_white[1] - $new_black[1]) * $old_x_g;
+        my $new_b = $new_black[2] + ($new_white[2] - $new_black[2]) * $old_x_b;
+        $new_r = $old_r + ($new_r - $old_r) * $amount;
+        $new_g = $old_g + ($new_g - $old_g) * $amount;
+        $new_b = $old_b + ($new_b - $old_b) * $amount;
+        $new_theme->{$key} = [linear_to_srgb($new_r, $new_g, $new_b)];
+    }
+
+    return $new_theme;
+}
+
+sub clamp {
+    my ($x, $min, $max) = @_;
+    if (!defined $min && !defined $max) { ($min, $max) = (0, 1); }
+    $min //= '-Inf' + 0;
+    $max //= 'Inf' + 0;
+    return $x < $min ? $min : $x > $max ? $max : $x;
+}
+
+sub rgb_hex {
+    my ($r, $g, $b) = @_;
+    return sprintf("#%02x%02x%02x", $r, $g, $b);
+}
+
+# https://en.wikipedia.org/wiki/SRGB
+sub srgb_to_linear {
+    my @c = @_;
+    @c = map { clamp($_ / 255) } @c;
+    @c = map {
+        ($_ <= 0.04045) ? ($_ / 12.92) : ((($_ + 0.055) ** 2.4) / 1.055)
+    } @c;
+    return map { round(clamp($_) * 255) } @c;
+}
+sub linear_to_srgb {
+    my @c = @_;
+    @c = map { clamp($_ / 255) } @c;
+    @c = map {
+        ($_ <= 0.0031308) ? (12.92 * $_) : (1.055 * ($_ ** (1 / 2.4)) - 0.055)
+    } @c;
+    return map { round(clamp($_) * 255) } @c;
+}
+
+sub mix {
+    my (
+        $new_r, $new_g, $new_b,
+        $old_r, $old_g, $old_b,
+        $amount
+    ) = @_;
+
+    $new_r = $old_r = ($new_r - $old_r) * $amount;
+    $new_g = $old_g = ($new_g - $old_g) * $amount;
+    $new_b = $old_b = ($new_b - $old_b) * $amount;
+    return ($new_r, $new_g, $new_b);
+}
