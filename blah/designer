@@ -1,0 +1,140 @@
+#!/usr/bin/env perl
+use warnings;
+use strict;
+use open qw(:locale);
+
+use lib "$ENV{HOME}/git/dse.d/perl-color-functions/lib";
+use Color::Functions qw(:all);
+
+# HSL
+# based on https://ciembor.github.io/4bit/
+#          https://github.com/ciembor/4bit
+
+our $dye               = linear_hsl(srgb_to_linear(210, 50, 50));
+our $dye_opacity       = 0.5;
+our $dye_color         = 1;
+our $dye_achromatic    = 1;
+our $hue               = 0;
+our $saturation        = 0.3;
+our $normal_lightness  = 0.6;
+our $bright_lightness  = 0.8;
+our $background        = [1/3, 0, 0.1];
+our $foreground        = [1/3, 0, 0.6];
+our $bright_background = [0, 0, 0.1];
+our $bright_foreground = [0, 0, 1];
+
+our $black   = [0,   0,           0];
+our $red     = [0,   $saturation, $normal_lightness];
+our $yellow  = [1/6, $saturation, $normal_lightness];
+our $green   = [1/3, $saturation, $normal_lightness];
+our $cyan    = [1/2, $saturation, $normal_lightness];
+our $blue    = [2/3, $saturation, $normal_lightness];
+our $magenta = [5/6, $saturation, $normal_lightness];
+our $white   = [0,   0,           .85];
+
+our $bright_black   = [0,   0,           .15];
+our $bright_red     = [0,   $saturation, $bright_lightness];
+our $bright_yellow  = [1/6, $saturation, $bright_lightness];
+our $bright_green   = [1/3, $saturation, $bright_lightness];
+our $bright_cyan    = [1/2, $saturation, $bright_lightness];
+our $bright_blue    = [2/3, $saturation, $bright_lightness];
+our $bright_magenta = [5/6, $saturation, $bright_lightness];
+our $bright_white   = [0,   0,           1.0];
+
+foreach my $color ($black,
+                   $red,
+                   $yellow,
+                   $green,
+                   $cyan,
+                   $blue,
+                   $magenta,
+                   $white,
+                   $bright_black,
+                   $bright_red,
+                   $bright_yellow,
+                   $bright_green,
+                   $bright_cyan,
+                   $bright_blue,
+                   $bright_magenta,
+                   $bright_white) {
+    if ($dye_color) {
+        @$color = color_mix(hsl_to_linear_rgb(@$color), hsl_to_linear_rgb(@$dye), $dye_opacity);
+    } else {
+        @$color = hsl_to_linear_rgb(@$color);
+    }
+}
+
+foreach my $color ($background,
+                   $foreground,
+                   $bright_background,
+                   $bright_foreground) {
+    if ($dye_achromatic) {
+        @$color = color_mix(hsl_to_linear_rgb(@$color), hsl_to_linear_rgb(@$dye), $dye_opacity);
+    } else {
+        @$color = hsl_to_linear_rgb(@$color);
+    }
+}
+
+foreach my $color ($black,
+                   $red,
+                   $yellow,
+                   $green,
+                   $cyan,
+                   $blue,
+                   $magenta,
+                   $white,
+                   $bright_black,
+                   $bright_red,
+                   $bright_yellow,
+                   $bright_green,
+                   $bright_cyan,
+                   $bright_blue,
+                   $bright_magenta,
+                   $bright_white,
+                   $background,
+                   $foreground,
+                   $bright_background,
+                   $bright_foreground) {
+    @$color = linear_to_srgb(@$color);
+}
+
+# hsl object stores a color and a dye
+# dye can either affect
+#     normal, bright (the 16 colors except for 2 blacks and 2 whites)
+#     achromatic
+#     all
+
+# 0,  60,    120,  180, 240, 300
+# red yellow green cyan blue magenta
+
+# hue-slider [-30, 30]
+# saturation-slider [0, 1]
+# lightness-slider (color) normal [0, 1] bright [0, 1]
+# black-slider [0, 1]
+# white-slider [0, 1]
+# dye-colorpicker --- an hsla color
+# dye-radio
+#     - none
+#     - achromatic
+#     - color (bright, normal)
+#     - all (achromatic, bright, normal)
+# background-colorpicker
+# foreground-colorpicker
+
+# improved colorspaces
+# https://bottosson.github.io/posts/colorpicker/
+#    okhsv
+#    okhsl
+# hsl, hsv: https://en.wikipedia.org/wiki/HSL_and_HSV
+# LCH
+
+# https://www.hsluv.org/
+
+# hsi
+# hsb
+# hls
+# hsv
+# hsp --- https://alienryderflex.com/hsp.html
+
+# photoshop .241 .691 .068
+
