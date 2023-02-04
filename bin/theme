@@ -5,8 +5,6 @@ use open qw(:locale);
 use List::Util qw(max min);
 use POSIX qw(round);
 
-STDOUT->autoflush(1);
-
 our $KEYS = [
     "HighlightForegroundColour",
     "HighlightBackgroundColour",
@@ -98,28 +96,37 @@ our $COLOR_NUMBERS = {
     White                     => '4;7',
 };
 
-our $ST  = "\e\\";              # string terminator
+our $ST = "\e\\";              # string terminator
 our $OSC = "\e]";               # operating system command
+our $GAMMA = 2.4;            # nominal gamma, sRGB, IEC 61966-2-1:1999
 
-our $GAMMA = 2.2;            # nominal gamma, sRGB, IEC 61966-2-1:1999
+###############################################################################
+
+our $action = 'set';
+our $amount = 0.5;
 
 if (scalar @ARGV && $ARGV[0] eq 'template') {
-    print_theme($DEFAULT_COLORS);
+    print(theme_string($DEFAULT_COLORS));
     exit(0);
 }
 
-our $action = "";
-
 if (scalar @ARGV && $ARGV[0] eq 'greenscreenify') {
-
-
     $action = 'greenscreenify';
+    shift(@ARGV);
+    if (scalar @ARGV) {
+        $amount = 0 + shift(@ARGV);
+    }
+}
+
+if (scalar @ARGV && $ARGV[0] eq 'trygreenscreenify') {
+    $action = 'trygreenscreenify';
     shift(@ARGV);
 }
 
 my $theme = {};
 while (<>) {
     s{\R\z}{};
+    next if /^\s*\#/;
     next unless m{^\s*(?<name>\S.*?)
                   \s*=\s*
                   (?<red>\d+)
@@ -130,44 +137,68 @@ while (<>) {
                   \s*$}x;
     my ($name, $red, $green, $blue) = @+{qw(name red green blue)};
     $_ = clamp($_, 0, 255) foreach ($red, $green, $blue);
-    $theme->{$name} = [$red, $green, $blue];
+    if ($action eq 'set') {
+        print(theme_setting_escape($name, $red, $green, $blue));
+    } elsif ($action eq 'greenscreenify') {
+        $theme->{$name} = [$red, $green, $blue];
+    } elsif ($action eq 'trygreenscreenify') {
+        $theme->{$name} = [$red, $green, $blue];
+    }
 }
 
-if ($action eq 'greenscreenify') {
-    STDOUT->autoflush(1);
-    STDERR->autoflush(1);
-    my @range = (0..30);
-    foreach my $i (@range, reverse(@range), @range, reverse(@range), @range, reverse(@range)) {
-        print STDERR ("$i\r");
-        select(undef, undef, undef, 0.1);
-        my $x = $i / 10;
-        my $new_theme = greenscreenify($theme, $x);
-        print_theme($new_theme);
+*STDOUT->autoflush(1);
+*STDERR->autoflush(1);
+
+if ($action eq 'trygreenscreenify') {
+    foreach my $i (0, 10, 0, 10, 0, 10, 0) {
+        select(undef, undef, undef, 0.2);
+        my $amount = $i / 10;
+        my $new_theme = greenscreenify($theme, $amount);
+        print(theme_string($new_theme));
     }
     exit(0);
 }
 
-foreach my $key (keys %$COLOR_NUMBERS) {
-    my $values = $theme->{$key};
-    if (!defined $values) {
-        warn("$key not specified\n");
-        next;
-    }
-    my $srgb_color = rgb_hex(@$values);
-    print($OSC, $COLOR_NUMBERS->{$key}, ';', $srgb_color, $ST);
+if ($action eq 'greenscreenify') {
+    my $new_theme = greenscreenify($theme, $amount);
+    print(theme_string($new_theme));
+    exit(0);
 }
 
-sub print_theme {
+if ($action eq 'set') {
+    foreach my $key (keys %$COLOR_NUMBERS) {
+        my $values = $theme->{$key};
+        if (!defined $values) {
+            next;
+        }
+        my $srgb_color = rgb_hex(@$values);
+        print(quotemeta(theme_setting_escape($key, $srgb_color)));
+    }
+    exit(0);
+}
+
+###############################################################################
+
+sub theme_setting_escape {
+    my ($key, @values) = @_;
+    my $color_number = $COLOR_NUMBERS->{$key};
+    return if !defined $color_number;
+    my $srgb_color = rgb_hex(@values);
+    return $OSC . $COLOR_NUMBERS->{$key} . ';' . $srgb_color . $ST;
+}
+
+sub theme_string {
     my ($theme) = @_;
     my $cols = max(map { length($_) } keys %$theme);
+    my $result = '';
     foreach my $key (@$KEYS) {
         if (defined $theme->{$key}) {
-            printf("%-*s = %3d, %3d, %3d\n",
-                   $cols, $key, @{$theme->{$key}});
+            $result .= sprintf("%-*s = %3d, %3d, %3d\n", $cols, $key, @{$theme->{$key}});
         } else {
-            printf("# %s not specified\n", $key);
+            $result .= sprintf("# %s not specified\n", $key);
         }
     }
+    return $result;
 }
 
 sub greenscreenify {
@@ -181,10 +212,8 @@ sub greenscreenify {
 
     my @new_bg    = srgb_to_linear(  0,  34,   0);
     my @new_fg    = srgb_to_linear( 51, 204,  51);
-    my @new_hi_fg = srgb_to_linear(102, 255, 102);
-    my @new_hi_bg = (($new_bg[0] + $new_hi_fg[0] - $new_fg[0]),
-                     ($new_bg[1] + $new_hi_fg[1] - $new_fg[1]),
-                     ($new_bg[2] + $new_hi_fg[2] - $new_fg[2]));
+    my @new_hi_fg = srgb_to_linear(255, 255, 255);
+    my @new_hi_bg = srgb_to_linear( 51, 102,  51);
 
     $new_theme->{BackgroundColour}          = [ linear_to_srgb(@new_bg) ];
     $new_theme->{ForegroundColour}          = [ linear_to_srgb(@new_fg) ];
@@ -204,10 +233,18 @@ sub greenscreenify {
         my $new_r = $new_black[0] + ($new_white[0] - $new_black[0]) * $old_x_r;
         my $new_g = $new_black[1] + ($new_white[1] - $new_black[1]) * $old_x_g;
         my $new_b = $new_black[2] + ($new_white[2] - $new_black[2]) * $old_x_b;
-        $new_r = $old_r + ($new_r - $old_r) * $amount;
-        $new_g = $old_g + ($new_g - $old_g) * $amount;
-        $new_b = $old_b + ($new_b - $old_b) * $amount;
         $new_theme->{$key} = [linear_to_srgb($new_r, $new_g, $new_b)];
+    }
+
+    # let's say current black is #000000
+    # let's say new background color is #002200
+    # put new black halfway between => #001100
+    #
+    # now let's say blue is #0000ff
+    #
+
+    foreach my $key (@$KEYS) {
+        @{$new_theme->{$key}} = mix(@{$new_theme->{$key}}, @{$theme->{$key}}, $amount);
     }
 
     return $new_theme;
@@ -230,29 +267,53 @@ sub rgb_hex {
 sub srgb_to_linear {
     my @c = @_;
     @c = map { clamp($_ / 255) } @c;
+
+    # @c = map { $_ ** 2.4 } @c;
     @c = map {
         ($_ <= 0.04045) ? ($_ / 12.92) : ((($_ + 0.055) ** 2.4) / 1.055)
     } @c;
+
     return map { round(clamp($_) * 255) } @c;
 }
 sub linear_to_srgb {
     my @c = @_;
     @c = map { clamp($_ / 255) } @c;
+
+    # @c = map { $_ ** (1 / 2.4) } @c;
     @c = map {
         ($_ <= 0.0031308) ? (12.92 * $_) : (1.055 * ($_ ** (1 / 2.4)) - 0.055)
     } @c;
+
     return map { round(clamp($_) * 255) } @c;
 }
 
 sub mix {
-    my (
-        $new_r, $new_g, $new_b,
-        $old_r, $old_g, $old_b,
-        $amount
-    ) = @_;
-
-    $new_r = $old_r = ($new_r - $old_r) * $amount;
-    $new_g = $old_g = ($new_g - $old_g) * $amount;
-    $new_b = $old_b = ($new_b - $old_b) * $amount;
+    my ($new_r, $new_g, $new_b, $old_r, $old_g, $old_b, $amount) = @_;
+    $new_r = clamp($old_r + ($new_r - $old_r) * $amount, 0, 255);
+    $new_g = clamp($old_g + ($new_g - $old_g) * $amount, 0, 255);
+    $new_b = clamp($old_b + ($new_b - $old_b) * $amount, 0, 255);
     return ($new_r, $new_g, $new_b);
 }
+
+sub linear_luma {
+    my ($r, $g, $b) = @_;
+    # luma component
+    return 0.2126 * $r + 0.7152 * $g + 0.0722 * $b; # ITU-R BT.709 conversion (HDTV, used in computer display applications like sRGB)
+    # return 0.299 * $r + 0.587 * $g + 0.114 * $b;  # ITU-R BT.601 conversion (SDTV, digital component video)
+    # 0.2126 / 0.7152  / 0.0722
+    # 0.35   / 0.50    / 0.15
+    # 61/256 / 174/256 / 21/256
+    # 4897/16384 + 9617/16384 + 1868/16384 (add two more to one of these)
+}
+
+# dye color picker: hsl
+# dye: none/all/achromatic/color
+# background color picker: h/s/l
+# foreground color picker: h/s/l
+# global properties:
+#     hue slider             [0, 1]
+#     saturation slider      [0, 1]
+# lightness
+#     color range  [0, 1], [0, 1]
+#     black range  [0, 1], [0, 1]
+#     white range  [0, 1], [0, 1]
